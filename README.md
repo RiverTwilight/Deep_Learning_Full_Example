@@ -9,3 +9,8 @@ python -m venv Env
 ./Env/Scripts/activate
 pip install -r requirements.txt
 ```
+
+## Suggested Reading Order
+
+1. [Basic](./basic.py)
+2. [Percetron](./perceptron.py)
