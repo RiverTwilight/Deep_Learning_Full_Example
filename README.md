@@ -14,3 +14,5 @@ pip install -r requirements.txt
 
 1. [Basic](./basic.py)
 2. [Percetron](./perceptron.py)
+
+## About

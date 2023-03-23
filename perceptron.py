@@ -26,3 +26,14 @@ def AND_2(x1, x2):
 
 print(AND_2(1, 1))
 print(AND_2(1, 0))
+
+# Only when both x1 and x2 is 1, the output is 0.
+def NAND(x1, x2):
+    x = np.array([x1, x2])
+    w = np.array([-0.5, -0.5])
+    b = 0.7
+    tmp = np.sum(x * w) + b # Here diffrenet from AND
+    if tmp <= 0:
+        return 0
+    else:
+        return 1
