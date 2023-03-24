@@ -37,3 +37,25 @@ def NAND(x1, x2):
         return 0
     else:
         return 1
+
+def OR(x1, x2):
+    w1, w2, theta = 0.5, 0.5, 0.3
+    tmp = x1*w1 + x2*w2 
+    if tmp <= theta:
+        return 0
+    elif tmp > theta:
+        return 1
+
+print(OR(1, 0))
+print(OR(0, 0))
+
+# A two-layer perceptron
+def XOR(x1, x2):
+    y1 = OR(x1, x2)
+    y2 = NAND(x1, x2)
+    return AND_2(y1, y2)
+
+print(XOR(1, 0)) # 1
+print(XOR(0, 0)) # 0
+
+# You've learned all basic of neural network. Now you can continue read neural-network.py .
