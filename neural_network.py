@@ -43,7 +43,7 @@ y = numerical_diff(func_1, x) # This is a valid operation (boardcast)
 plt.xlabel("x")
 plt.ylabel("y")
 plt.plot(x, y)
-plt.show()
+# plt.show()
 
 def softmax(a):
     c = np.max(a)
@@ -52,6 +52,16 @@ def softmax(a):
     y = exp_a / sum_exp_a
 
     return y
+
+def softmax_batch(x):
+    if x.ndim == 2:
+        x = x.T
+        x = x - np.max(x, axis=0)
+        y = np.exp(x) / np.sum(np.exp(x), axis=0)
+        return y.T 
+
+    x = x - np.max(x) # 溢出对策
+    return np.exp(x) / np.sum(np.exp(x))
 
 def cross_entropy_error(y, t):
     """
@@ -66,5 +76,9 @@ def cross_entropy_error_batch(y, t):
         t = t.reshape(1, t.size)
         y = y.reshape(1, y.size)
     
+    # 监督数据是one-hot-vector的情况下，转换为正确解标签的索引
+    if t.size == y.size:
+        t = t.argmax(axis=1)
+    
     batch_size = y.shape[0]
-    return -np.sum(t * np.log(y + 1e-7)) / batch_size
+    return -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size

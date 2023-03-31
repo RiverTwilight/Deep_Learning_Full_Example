@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import sys, os
 sys.path.append(os.pardir)
 import numpy as np
@@ -30,8 +32,8 @@ for i in range(iters_num):
     for key in ('W1', 'b1', 'W2', 'b2'):
         network.params[key] -= learning_rate * grad[key] # Also see gradinent.py
 
-        loss = network.loss(x_batch, t_batch)
-        train_loss_list.append(loss)
+    loss = network.loss(x_batch, t_batch)
+    train_loss_list.append(loss)
 
     if i % iter_per_epoch == 0:
         train_acc = network.accuracy(x_train, t_train)

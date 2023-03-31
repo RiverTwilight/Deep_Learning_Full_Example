@@ -1,5 +1,5 @@
 import numpy as np
-from neural_network import cross_entropy_error, softmax
+from neural_network import cross_entropy_error_batch, softmax_batch
 
 class Relu:
     def __init__(self) -> None:
@@ -24,11 +24,11 @@ class Relu:
 
         return dx
 
-reluTest = Relu()
+# reluTest = Relu()
 
-print(reluTest.forward(np.array([2, 1, -1, -10, 0]))) # 2 1 0 0 0
-print(reluTest.mask) # [False False  True  True  True]
-print(reluTest.backward(np.array([2, 1, -1, -10, 0]))) # 2 1 0 0 0
+# print(reluTest.forward(np.array([2, 1, -1, -10, 0]))) # 2 1 0 0 0
+# print(reluTest.mask) # [False False  True  True  True]
+# print(reluTest.backward(np.array([2, 1, -1, -10, 0]))) # 2 1 0 0 0
 
 class Sigmoid:
     def __init__(self) -> None:
@@ -55,7 +55,9 @@ class Affine:
     
     def forward(self, x):
         self.x = x
-        out = np.dot(x, self.W) + self.b # Boardcasting...
+        x = x.reshape(x.shape[0], -1)
+        dot = np.dot(self.x, self.W)
+        out = dot + self.b # Boardcasting...
 
         return out
 
@@ -80,16 +82,21 @@ class SoftmaxWithLoss:
         # Teaching Data. Marking the right answer.
         # Set right anwser to 1 and wrongs to 0. For exmaple, [0, 0, 0, 1, 0, 0]
 
-        self.y = softmax(x)
-        self.loss = cross_entropy_error(self.y, self.t)
+        self.y = softmax_batch(x)
+        self.loss = cross_entropy_error_batch(self.y, self.t)
 
         return self.loss
 
     def backward(self, dout=1):
         batch_size = self.t.shape[0]
-        dx = (self.y - self.t) / batch_size
-
+        if self.t.size == self.y.size: # 监督数据是one-hot-vector的情况
+            dx = (self.y - self.t) / batch_size
+        else:
+            dx = self.y.copy()
+            dx[np.arange(batch_size), self.t] -= 1
+            dx = dx / batch_size
+        
         return dx
 
-print(SoftmaxWithLoss().forward(np.array([0.0001, 0.9999, 0.00001]), np.array([0, 1, 0]))) # 0.5515 When we got accurency data, It's very small
-print(SoftmaxWithLoss().forward(np.array([0.9, 0.05, 0.05]), np.array([0, 1, 0]))) # 1.4677 When we got coraouse data, It's very large
+# print(SoftmaxWithLoss().forward(np.array([0.0001, 0.9999, 0.00001]), np.array([0, 1, 0]))) # 0.5515 When we got accurency data, It's very small
+# print(SoftmaxWithLoss().forward(np.array([0.9, 0.05, 0.05]), np.array([0, 1, 0]))) # 1.4677 When we got coraouse data, It's very large
