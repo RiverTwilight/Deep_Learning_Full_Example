@@ -54,6 +54,10 @@ def softmax(a):
     return y
 
 def cross_entropy_error(y, t):
+    """
+    We want the loss function result as small as possible.
+    We introduce loss function to find a params that generate small loss function result.
+    """
     delta = 1e-7
     return -np.sum(t * np.log(y + delta))
     
@@ -63,3 +67,4 @@ def cross_entropy_error_batch(y, t):
         y = y.reshape(1, y.size)
     
     batch_size = y.shape[0]
+    return -np.sum(t * np.log(y + 1e-7)) / batch_size
