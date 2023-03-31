@@ -72,8 +72,9 @@ class SoftmaxWithLoss:
     """
     Make sure the sum of output is 1
     """
-    def __init__(self) -> None:
+    def __init__(self, print_result=False) -> None:
         self.loss = None
+        self.print_result = print_result
         self.y = None
         self.x = None
 
